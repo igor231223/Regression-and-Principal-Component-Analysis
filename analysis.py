@@ -19,7 +19,6 @@ RU_NAMES = {
     "rm": "Число комнат",
     "age": "Старый жилфонд",
     "dis": "Удалённость",
-    "rad": "Индекс шоссе",
     "tax": "Налог",
     "ptratio": "Ученики/учитель",
     "b": "Индекс B",
@@ -35,6 +34,7 @@ PCA_VARIANCE = 0.85
 
 def load_frame():
     df = pd.read_csv(DATA_PATH)
+    df = df.drop(columns=["rad"])
     return df.rename(columns=RU_NAMES)
 
 
@@ -124,10 +124,6 @@ def main():
     print("=" * 80)
     print("\nОПИСАТЕЛЬНАЯ СТАТИСТИКА")
     print(descriptive_table(df).round(2).to_string())
-
-    mask_rad = df["Индекс шоссе"] == 24
-    print(f"\nРайонов с индексом шоссе = 24: {int(mask_rad.sum())}")
-    print("Налог в этих районах:", sorted(df.loc[mask_rad, "Налог"].unique().tolist()))
 
     corr = df.corr(numeric_only=True)
     pairs = []
